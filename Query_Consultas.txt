@@ -1,0 +1,124 @@
+CREATE TABLE "Informacion_Basica" (
+	"Cod_Informacion_Basica"	INTEGER,
+	"Fuerza_Basica"	INTEGER,
+	"Destreza_Basica"	INTEGER,
+	"Inteligencia_Basica"	INTEGER,
+	"Nombre_Personaje"	VARCHAR(0,20),
+	"Descripcion_Personaje"	VARCHAR(0,100),
+	PRIMARY KEY("Cod_Informacion_Basica")
+);
+
+CREATE TABLE "Personaje" (
+	"Cod_Personaje"	VARCHAR(0, 20),
+	"Cod_Informacion_Basica"	VARCHAR(0, 20),
+	"Fuerza_Personaje"	INTEGER,
+	"Destreza_Personaje"	INTEGER,
+	"Inteligencia_Personaje"	INTEGER,
+	"Crecimiento"	INTEGER,
+	"Nivel_Personaje"	INTEGER,
+	"Experiencia_Requerida_Personaje"	INTEGER,
+	"Experiencia_Actual_Personaje"	INTEGER,
+	PRIMARY KEY("Cod_Personaje"),
+	FOREIGN KEY (Cod_Informacion_Basica) REFERENCES Informacion_Basica(Cod_Informacion_Basica)
+);
+
+CREATE TABLE "Habilidad" (
+	"Cod_Nombre_Habilidad" VARCHAR(0,20),
+	"Descripcion_Habilidad"	VARCHAR(0,100),
+	"Numero_Habilidad"	INTEGER,
+	PRIMARY KEY("Cod_Nombre_Habilidad" )
+);
+
+CREATE TABLE "Nivel_Juego" (
+	"Cod_Nivel_Juego"	VARCHAR(0,20),
+	"Nombre_Nivel_Juego"	VARCHAR(0,20),
+	"Descripcion_Nivel_Juego"	VARCHAR(0,100),
+	"Numero_Nivel_Juego"	INTEGER,
+	PRIMARY KEY("Cod_Nivel_Juego")
+);
+
+CREATE TABLE "Partida" (
+	"Cod_Partida"	INTEGER PRIMARY KEY AUTOINCREMENT,
+	"Nombre_Partida"	VARCHAR(0,20) UNIQUE,
+	"Porcemtaje_Partida"	NUMERIC
+);
+
+
+CREATE TABLE "Personaje_Obtenido" (
+	Cod_Partida INTEGER,
+	Cod_Personaje INTEGER,
+	FOREIGN KEY (Cod_Partida) REFERENCES Partida(Cod_Partida),
+	FOREIGN KEY (Cod_Personaje) REFERENCES Personaje(Cod_Personaje)
+);
+
+CREATE TABLE "Progreso" (
+	Cod_Partida INTEGER,
+	Cod_Nivel_Juego VARCHAR(0,20),
+	Completo BOOL,
+	FOREIGN KEY (Cod_Partida) REFERENCES Partida(Cod_Partida),
+	FOREIGN KEY (Cod_Nivel_Juego) REFERENCES Nivel_Juego(Cod_Nivel_Juego)
+);
+
+CREATE TABLE "Personaje_Habilidad" (
+	"Cod_Personaje"	VARCHAR(0, 20),
+	"Cod_Nombre_Habilidad" VARCHAR(0,20),
+	FOREIGN KEY (Cod_Personaje) REFERENCES Personaje(Cod_Personaje),
+	FOREIGN KEY (Cod_Nombre_Habilidad) REFERENCES Habilidad(Cod_Nombre_Habilidad)
+);
+
+
+//Borrar Tablas
+
+DROP TABLE Personaje;
+DROP TABLE Habilidad;
+DROP TABLE Nivel_Juego;
+DROP TABLE Partida;
+DROP TABLE Progreso;
+DROP TABLE Personaje_Habilidad;
+DROP TABLE Personaje_Obtenido;
+DROP TABLE Informacion_Basica;
+
+//Insertar Datos Personaje
+INSERT INTO PERSONAJE VALUES ('Aura_Personaje','Aura_Informacion_Basica',1,1,1,10,1,100,0);
+
+//Informacion Basica
+INSERT INTO Informacion_Basica VALUES ('Aura_Informacion_Basica',1,1,1,'Aura','Una de las unicas sobrevivientes de el refujio Asabache 
+que protegia a aquellos que se acercaban al enlace magico
+completo 
+Cuando llego la tecnologia estos seres empezaron a ser 
+Cazados siendo el refujio uno de los primeros blancos
+solo dos personas salieron vivas del incidente');
+
+
+//Nivel Juego
+INSERT INTO Nivel_Juego values("Nivel_01","Bosque Negro",1,"Bosque Extenso donde ocurre el primer encuentro entre las personas y las maquinas");
+INSERT INTO Nivel_Juego values("Nivel_02","Cueva Hielo",1,"Cueva de hielo protegiendo a los rebeldes de ");
+INSERT INTO Nivel_Juego values("Nivel_02","Cueva Hielo",1,"Cueva de hielo protegiendo a los rebeldes de ");
+
+//ABM Progreso
+INSERT INTO Progreso VALUES (4,"Nivel_01",FALSE);
+INSERT INTO Progreso VALUES (9,"Nivel_02",FALSE);
+DELETE FROM Progreso WHERE Cod_Partida = 4;
+
+//ABM Habilidad
+
+INSERT INTO Habilidad VALUES ('Ataque_Hielo','Lluvia de Hielo
+Ataque de Area que dañara a los enemigos cercanos.',1);
+INSERT INTO Habilidad VALUES ('Bola_Fuego','Bola de Fuego
+Daña a todos los enemigos delante del personaje.',2);
+INSERT INTO Habilidad VALUES ('Terremoto','Lluvia de Hielo',3);
+INSERT INTO Habilidad VALUES ('Rompe_Escudos','Lluvia de Hielo',4);
+INSERT INTO Habilidad VALUES ('Remolino','Lluvia de Hielo',5);
+INSERT INTO Habilidad VALUES ('Ataque_Magico','Lluvia de Hielo',6);
+INSERT INTO Habilidad VALUES ('Ataque_Naturaleza','Lluvia de Hielo',7);
+INSERT INTO Habilidad VALUES ('Luz_Solar','Lluvia de Hielo',8);
+
+//Personaje Habilidad
+INSERT INTO Personaje_Habilidad VALUES ('Aura_Personaje','Ataque_Hielo');
+INSERT INTO Personaje_Habilidad VALUES ('Aura_Personaje','Bola_Fuego');
+INSERT INTO Personaje_Habilidad VALUES ('Bartholome_Personaje','Terremoto');
+INSERT INTO Personaje_Habilidad VALUES ('Bartholome_Personaje','Rompe_Escudos');
+INSERT INTO Personaje_Habilidad VALUES ('Siv_Personaje','Remolino');
+INSERT INTO Personaje_Habilidad VALUES ('Siv_Personaje','Ataque_Magico');
+INSERT INTO Personaje_Habilidad VALUES ('EM-1-L1_Personaje','Ataque_Naturaleza');
+INSERT INTO Personaje_Habilidad VALUES ('EM-1-L1_Personaje','Luz_Solar');
